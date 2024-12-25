@@ -36,9 +36,20 @@ public class PlayerController : MonoBehaviour
         
         [Header("Input")]
         private Vector2 inputVector;
-        
-        
-        
+
+
+        public Camera cam;
+    
+        public void SetCamera(Camera assignedCam)
+        {
+            if (assignedCam == null)
+            {
+                Debug.LogError("Kamera atanamadı!");
+                return;
+            }
+
+            cam = assignedCam;
+        }
         
         public bool isJumping
         {
@@ -115,28 +126,25 @@ public class PlayerController : MonoBehaviour
 
         public void HandleMovement()
         {
-            
-            Vector3 move = new Vector3(inputVector.x, 0, inputVector.y);
-            move = CameraManager.Instance.MainCam.transform.forward * move.z + CameraManager.Instance.MainCam.transform.right * move.x;
-            
-            move.y = VerticalForceCalculation(); 
+            Vector3 move = new Vector3(inputVector.x, 0, inputVector.y).normalized;
             
             move *= walkSpeed;
             
             characterController.Move(move * Time.deltaTime);
         }
+
         public void HandleRotation()
         {
-        
             if (inputVector.magnitude > 0.1f)
             {
-                Vector3 moveDir = (CameraManager.Instance.MainCam.transform.forward * inputVector.y + CameraManager.Instance.MainCam.transform.right * inputVector.x).normalized;
-                moveDir.y = 0; 
+                Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y).normalized;
                 
                 Quaternion targetRotation = Quaternion.LookRotation(moveDir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
         }
+
+
         
         private float VerticalForceCalculation()
         {

@@ -50,18 +50,26 @@ public class PlayerManager : MonoBehaviour
     {
         if (!PV.IsMine)
             return;
+        
         RespawnManager respawnManager = FindObjectOfType<RespawnManager>();
         int spawnIndex = PV.Owner.ActorNumber - 1;
         Transform respawnPoint = respawnManager.respawnPoints[spawnIndex];
-
         
         GameObject controller = PhotonNetwork.Instantiate(
             Path.Combine("PhotonPrefabs", "Player"),
             respawnPoint.position,
-            respawnPoint.rotation 
+            respawnPoint.rotation
         );
         
+        CameraManager.Instance.AssignTarget(controller.transform);
+        
+        PlayerController playerController = controller.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.SetCamera(CameraManager.Instance.GetMainCamera());
+        }
     }
+
     
     
 

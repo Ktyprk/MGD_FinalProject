@@ -1,22 +1,36 @@
+using System;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public static CameraManager Instance { get; private set; }
+    public Transform target;
+    public Vector3 offset;
 
-    [field: SerializeField] 
-    public Camera MainCam { get; private set; }
-
+    public static CameraManager Instance;
+    private Camera mainCam;
+    
     private void Awake()
     {
-        if (Instance == null)
+        Instance = this;
+        
+        mainCam = Camera.main;
+    }
+
+    void Update()
+    {
+        if (target != null)
         {
-            Instance = this;
+            transform.position = target.position + offset;
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+    }
+    
+    public void AssignTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+    
+    public Camera GetMainCamera()
+    {
+        return mainCam;
     }
 }

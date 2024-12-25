@@ -102,9 +102,10 @@ MonoBehaviour:
   jumpState: {fileID: 7297660915789688677}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
-  groundCheckRadius: 0.1
+    m_Bits: 8
+  groundCheckRadius: 0.7
   groundCheckOffset: {x: 0, y: -0.5, z: 0}
+  cam: {fileID: 0}
 --- !u!143 &8983989318997479819
 CharacterController:
   m_ObjectHideFlags: 0
