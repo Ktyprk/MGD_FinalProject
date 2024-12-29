@@ -4,7 +4,7 @@ using UnityEngine;
     {
         public override void EnterState(PlayerController player)
         {
-           // player.playerAC.Idle();
+            player.playerAC.Idle();
         }
 
         public override void ExitState(PlayerController player)

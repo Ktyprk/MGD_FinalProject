@@ -5,7 +5,7 @@ using UnityEngine;
     {
             public override void EnterState(PlayerController player)
             {
-               // player.playerAC.Walk();
+               player.playerAC.Walk();
             }
 
             public override void ExitState(PlayerController player)

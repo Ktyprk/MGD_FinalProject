@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
         [SerializeField] private CharacterController characterController;
     
+         public int Health = 10;
+         public bool alive = true;
+    
         public PhotonView photonView;
 
-        //public PlayerAnimatorController playerAC;
+        public PlayerAnimatorController playerAC;
 
         [Header("Settings")]
         [SerializeField] private float rotationSpeed = 10f;
@@ -143,8 +146,23 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
         }
+    
+        public void TakeDamage(int damage, Player _player)
+        {
+            photonView.RPC("RPC_TakeDamage", _player, damage);
+        }
 
-
+        [PunRPC]
+        void RPC_TakeDamage(int damage)
+        {
+            Health -= damage;
+            if(Health <= 0)
+            {
+                Health = 0;
+                alive = false;
+            }
+            Debug.Log("Taken " + damage + " damage.");
+        }
         
         private float VerticalForceCalculation()
         {
