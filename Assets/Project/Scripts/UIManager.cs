@@ -6,8 +6,8 @@ using Photon.Realtime;
 
 public class UIManager : MonoBehaviour
 {
-    public Slider healthSlider;
-    [HideInInspector] public PlayerController _player;
+    public Slider healthSlider; 
+    public PlayerController _player;
 
     public Text countDownText;
     public bool startCountdown;

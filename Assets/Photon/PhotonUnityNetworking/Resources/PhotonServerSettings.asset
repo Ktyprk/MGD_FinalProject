@@ -42,6 +42,8 @@ MonoBehaviour:
   - UpdateReadyStatus
   - UpdateReadyStatusRPC
   - RPC_TakeDamage
+  - RPC_Die
+  - RPC_SetVelocity
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

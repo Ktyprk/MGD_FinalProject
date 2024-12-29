@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -125,6 +126,19 @@ public class PlayerController : MonoBehaviour
             {
                 SetState(idleState);
             }
+            
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                GameObject bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), transform.position+ this.transform.forward*2f, Quaternion.identity);
+                bullet.GetComponent<Bullet>().SetVelocity(this.transform.forward);
+            }
+
+            if (Health <= 0)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+            
+            
         }
 
         public void HandleMovement()

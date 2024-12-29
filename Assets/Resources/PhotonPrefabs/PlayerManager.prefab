@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actorNumber: 0
+  _UIManager: {fileID: 0}
 --- !u!114 &-244768360268372021
 MonoBehaviour:
   m_ObjectHideFlags: 0

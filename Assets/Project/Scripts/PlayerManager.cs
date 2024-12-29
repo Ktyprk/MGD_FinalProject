@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
     public int actorNumber;
+    public UIManager _UIManager;
 
     void Awake()
     {
@@ -68,6 +69,8 @@ public class PlayerManager : MonoBehaviour
         {
             playerController.SetCamera(CameraManager.Instance.GetMainCamera());
         }
+        _UIManager = FindObjectOfType<UIManager>();
+        _UIManager._player = controller.GetComponent<PlayerController>();
     }
 
     
