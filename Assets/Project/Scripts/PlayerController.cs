@@ -103,6 +103,12 @@ public class PlayerController : MonoBehaviour
             currentState.EnterState(this);
             OnStateChange?.Invoke(currentState);
         }
+        
+        public float spawnInterval = 0.5f; // Mermi spawn aralığı (saniye)
+        public float bulletForce = 20f;   // Mermiye uygulanacak ileri yönlü kuvvet
+
+        private bool isShooting = false;  // Mouse sol tuşu basılı mı?
+        private float spawnTimer = 0f; 
 
         private void Update()
         {
@@ -127,10 +133,27 @@ public class PlayerController : MonoBehaviour
                 SetState(idleState);
             }
             
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetMouseButtonDown(0))
             {
-                GameObject bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), transform.position+ this.transform.forward*2f, Quaternion.identity);
-                bullet.GetComponent<Bullet>().SetVelocity(this.transform.forward);
+                isShooting = true;
+            }
+
+            // Mouse sol tuşu bırakıldığında atış durur
+            if (Input.GetMouseButtonUp(0))
+            {
+                isShooting = false;
+                spawnTimer = 0f; // Zamanlayıcıyı sıfırla
+            }
+
+            // Eğer atış yapılıyorsa ve zamanlama uygunsa mermi spawn et
+            if (isShooting)
+            {
+                spawnTimer += Time.deltaTime;
+                if (spawnTimer >= spawnInterval)
+                {
+                    SpawnBullet();
+                    spawnTimer = 0f;
+                }
             }
 
             if (Health <= 0)
@@ -139,6 +162,22 @@ public class PlayerController : MonoBehaviour
             }
             
             
+        }
+        
+        void SpawnBullet()
+        {
+            GameObject bullet = PhotonNetwork.Instantiate(
+                Path.Combine("PhotonPrefabs", "Bullet"), 
+                transform.position + transform.forward * 2f, 
+                Quaternion.identity
+            );
+
+            // Mermiye ileri yönlü kuvvet uygula
+            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+            if (bulletRb != null)
+            {
+                bulletRb.AddForce(transform.forward * bulletForce, ForceMode.Impulse);
+            }
         }
 
         public void HandleMovement()
