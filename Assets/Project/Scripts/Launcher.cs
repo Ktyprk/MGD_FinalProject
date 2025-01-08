@@ -17,10 +17,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public Transform roomListContent;
     public GameObject roomListItem;
-    public GameObject gameIsStarted;
 
     bool connectFirstTime = true;
     private bool isReady = false;
+    
+    public TMP_InputField NicknameInputField;
+    public GameObject NicknameSetButton;
 
     void Awake()
     {
@@ -91,13 +93,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            startGameButton.SetActive(true); // Master Client için başlangıç butonu
-            readyGameButton.SetActive(false); // Hazır butonu devre dışı
+            startGameButton.SetActive(true); 
+            readyGameButton.SetActive(false); 
         }
         else
         {
-            startGameButton.SetActive(false); // Diğer oyuncular için başlangıç butonu devre dışı
-            readyGameButton.SetActive(true);  // Hazır butonu aktif
+            startGameButton.SetActive(false);
+            readyGameButton.SetActive(true); 
         }
     }
 
@@ -146,21 +148,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
             foreach (Player player in PhotonNetwork.PlayerList)
             {
-                // Eğer kontrol edilen oyuncu Master Client ise atla
                 if (player.IsMasterClient)
                     continue;
 
                 if (player.CustomProperties.TryGetValue("IsReady", out object isReady))
                 {
                     if (!(bool)isReady)
-                        return false; // Diğer oyunculardan biri hazır değilse false döndür
+                        return false;
                 }
                 else
                 {
-                    return false; // Eğer "IsReady" property eksikse false döndür
+                    return false;
                 }
             }
-            return true; // Tüm oyuncular hazır
+            return true;
 
     }
     
@@ -188,6 +189,34 @@ public class Launcher : MonoBehaviourPunCallbacks
         
         readyGameButton.GetComponentInChildren<TMP_Text>().text = isReady ? "Hazır" : "Hazır Değil";
     }
+    
+    public void SetNickname()
+    {
+        string nickname = NicknameInputField.text;
+
+        if (!string.IsNullOrEmpty(nickname))
+        {
+            // Photon'da NickName'i ayarla
+            PhotonNetwork.NickName = nickname;
+
+            // Photon Custom Properties ile adını diğer oyuncularla senkronize et
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { "NickName", nickname }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+            // PlayerPrefs'te kaydet
+            PlayerPrefs.SetString("Nickname", nickname);
+
+            Debug.Log($"Nickname set to: {nickname}");
+        }
+        else
+        {
+            Debug.LogWarning("Nickname cannot be empty!");
+        }
+    }
+
 
 
 
