@@ -4,7 +4,7 @@ public class Spinner : MonoBehaviour
 {
 
 public GameObject spinningObject;
-[SerializeField] private float spinSpeed = 100f;
+[SerializeField] public float spinSpeed = 100f;
 
     // Update is called once per frame
     void Update()
