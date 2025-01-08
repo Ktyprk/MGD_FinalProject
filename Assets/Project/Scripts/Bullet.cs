@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         {
             if (timer > 0)
             {
-                //timer -= Time.fixedDeltaTime;
+                timer -= Time.fixedDeltaTime;
             }
             else
             {
@@ -47,12 +47,29 @@ public class Bullet : MonoBehaviour
     {
         if (PV.IsMine)
         {
-            if((col.gameObject.tag == "Player")&&(PV.Owner ==col.gameObject.GetComponent<PlayerController>().photonView.Owner))
+            var enemyHealthController = col.gameObject.GetComponent<EnemyHealthController>();
+
+            if (enemyHealthController != null)
             {
-                col.gameObject.GetComponent<PlayerController>().TakeDamage(bulletDamage, col.gameObject.GetComponent<PlayerController>().photonView.Owner);
-               
-                //PhotonNetwork.Destroy(gameObject);
+                if (PV.Owner == enemyHealthController.photonView.Owner)
+                {
+                    enemyHealthController.EnemyTakeDamage(bulletDamage);
+                    PhotonNetwork.Destroy(gameObject);
+                }
+                else
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                }
             }
+            else
+            {
+                // EnemyHealthController yoksa sadece mermiyi yok et
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
+        else
+        {
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
