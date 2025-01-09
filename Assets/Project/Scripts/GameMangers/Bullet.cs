@@ -52,25 +52,18 @@ public class Bullet : MonoBehaviour
 
             if (enemyHealthController != null)
             {
-                if (PV.Owner == enemyHealthController.photonView.Owner)
-                {
-                    enemyHealthController.EnemyTakeDamage(bulletDamage);
-                    PhotonNetwork.Destroy(gameObject);
-                }
-                else
-                {
-                    PhotonNetwork.Destroy(gameObject);
-                }
+                enemyHealthController.EnemyTakeDamage(bulletDamage);
             }
-            else
-            {
-                PhotonNetwork.Destroy(gameObject);
-            }
-        }
-        else
-        {
-            PhotonNetwork.Destroy(gameObject);
+
+            PV.RPC("RPC_DestroyBullet", RpcTarget.All);
         }
     }
+
+    [PunRPC]
+    void RPC_DestroyBullet()
+    {
+        Destroy(gameObject);
+    }
+
 
 }

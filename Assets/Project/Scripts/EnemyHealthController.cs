@@ -13,10 +13,8 @@ public class EnemyHealthController : MonoBehaviour
 
     public void EnemyTakeDamage(int damage)
     {
-        if (photonView.IsMine) 
-        {
-            photonView.RPC("RPC_TakeDamage", RpcTarget.All, damage);
-        }
+        photonView.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        
     }
 
     [PunRPC]

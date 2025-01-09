@@ -25,7 +25,6 @@ public class TargetHealthController : MonoBehaviourPun
             Destroy(gameObject);
         }
         UpdateHealthBar();
-        Debug.Log("Taken " + damage + " damage. Remaining Health: " + currentHealth);
     }
 
     private void UpdateHealthBar()
