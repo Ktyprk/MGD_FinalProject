@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,11 +44,11 @@ public class Bullet : MonoBehaviour
         rb.linearVelocity = dir * bulletSpeed;
     }
 
-    void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider other)
     {
         if (PV.IsMine)
         {
-            var enemyHealthController = col.gameObject.GetComponent<EnemyHealthController>();
+            var enemyHealthController = other.gameObject.GetComponent<EnemyHealthController>();
 
             if (enemyHealthController != null)
             {
@@ -63,7 +64,6 @@ public class Bullet : MonoBehaviour
             }
             else
             {
-                // EnemyHealthController yoksa sadece mermiyi yok et
                 PhotonNetwork.Destroy(gameObject);
             }
         }

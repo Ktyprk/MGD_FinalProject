@@ -1,19 +1,50 @@
 using UnityEngine;
+using UnityEngine.UI;
+using Photon.Pun;
 
-public class TargetHealthController : MonoBehaviour
+public class TargetHealthController : MonoBehaviourPun
 {
-    public int health = 1000;
-    
-    
-    
+    public int maxHealth = 1000;
+    private int currentHealth;
+
+    public Image healthFillImage; 
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+        UpdateHealthBar();
+    }
+
+    [PunRPC]
     public void TargetTakeDamage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            health = 0;
+            currentHealth = 0;
             Destroy(gameObject);
         }
-        Debug.Log("Taken " + damage + " damage. Remaining Health: " + health);
+        UpdateHealthBar();
+        Debug.Log("Taken " + damage + " damage. Remaining Health: " + currentHealth);
+    }
+
+    private void UpdateHealthBar()
+    {
+        if (healthFillImage != null)
+        {
+            healthFillImage.fillAmount = (float)currentHealth / maxHealth;
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            photonView.RPC("TargetTakeDamage", RpcTarget.AllBuffered, damage);
+        }
+        else
+        {
+            TargetTakeDamage(damage);
+        }
     }
 }

@@ -215,11 +215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a517a23a8fa9a9419ccdd9ee678e54f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1: {fileID: 4829085611075302500, guid: 6d1b4d52fb34a78479ab77ccb5f1ce87, type: 3}
-  enemy2: {fileID: 3372467595937491249, guid: 5e6c4c1aaee89d242b59dfc5c64004e9, type: 3}
-  spawnPoint: {fileID: 8520546540724007955}
-  spawnRadius: 30
-  spawnOuterRadius: 45
+  enemy1Prefab: {fileID: 0}
+  enemy2Prefab: {fileID: 0}
+  spawnPoints: []
 --- !u!1 &1677283450541216652
 GameObject:
   m_ObjectHideFlags: 0

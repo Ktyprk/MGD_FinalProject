@@ -1,48 +1,62 @@
+using Photon.Pun;
 using UnityEngine;
 using System.Collections;
+using System.IO;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviourPunCallbacks
 {
-    public GameObject enemy1; // İlk düşman tipi
-    public GameObject enemy2; // İkinci düşman tipi
-    public Transform spawnPoint; // Spawn olma noktası
-    public float spawnRadius = 30f; // Minimum spawn mesafesi
-    public float spawnOuterRadius = 45f; // Maksimum spawn mesafesi
+    public Transform[] spawnPoints; 
+
+    private bool shouldSpawn = false;
 
     void Start()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(WaitAndStartSpawning(2f));
+        }
+    }
+
+    IEnumerator WaitAndStartSpawning(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        shouldSpawn = true;
         StartCoroutine(SpawnEnemies());
     }
 
     IEnumerator SpawnEnemies()
     {
-        while (true)
+        while (shouldSpawn)
         {
-            float spawnDelay = Random.Range(2f, 5f); // 2 ila 5 saniye arası rastgele süre
+            float spawnDelay = Random.Range(2f, 5f); 
             yield return new WaitForSeconds(spawnDelay);
 
-            Vector3 randomOffset = Random.insideUnitSphere * spawnOuterRadius;
-            randomOffset.y = 0; 
-
-            if (randomOffset.magnitude < spawnRadius)
-            {
-                randomOffset = randomOffset.normalized * spawnRadius;
-            }
-
-            Vector3 spawnPosition = spawnPoint.position + randomOffset;
-
-            int enemyType = Random.Range(0, 2); // 0 veya 1
+            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            int enemyType = Random.Range(0, 2);
 
             if (enemyType == 0)
             {
-                enemy1.GetComponent<EnemyMovement>().target = this.gameObject;
-                Instantiate(enemy1, spawnPosition, spawnPoint.rotation);
+                //PhotonNetwork.Instantiate(enemy1Prefab.name, spawnPoint.position, spawnPoint.rotation);
+                PhotonNetwork.Instantiate(
+                    Path.Combine("PhotonPrefabs", "BatEnemy"),
+                    spawnPoint.position, spawnPoint.rotation
+                );
             }
             else
             {
-                enemy2.GetComponent<EnemyMovement>().target = this.gameObject;
-                Instantiate(enemy2, spawnPosition, spawnPoint.rotation);
+                PhotonNetwork.Instantiate(
+                    Path.Combine("PhotonPrefabs", "BatEnemy"),
+                    spawnPoint.position, spawnPoint.rotation
+                );
             }
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        if (PhotonNetwork.IsMasterClient && !shouldSpawn)
+        {
+            StartCoroutine(WaitAndStartSpawning(2f));
         }
     }
 }

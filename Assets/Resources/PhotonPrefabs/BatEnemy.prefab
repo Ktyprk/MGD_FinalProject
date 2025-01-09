@@ -185,7 +185,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1806181880937163940}
-  - component: {fileID: 304566510505388439}
   - component: {fileID: 3634047535911425183}
   - component: {fileID: 3197633741188794400}
   - component: {fileID: 3904458325833122070}
@@ -193,7 +192,7 @@ GameObject:
   - component: {fileID: 2019289802293505486}
   - component: {fileID: -518133770621393782}
   - component: {fileID: 8711899501337291347}
-  - component: {fileID: 7345274620427805758}
+  - component: {fileID: 8464511146838728654}
   m_Layer: 0
   m_Name: BatEnemy
   m_TagString: Bat
@@ -218,23 +217,6 @@ Transform:
   - {fileID: 7215978322786744525}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!320 &304566510505388439
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4829085611075302500}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: c65f1ff092798144f950926092ec687b, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings: []
-  m_ExposedReferences:
-    m_References: []
 --- !u!114 &3634047535911425183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,7 +224,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4829085611075302500}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5ad555471c09e44ebaba73e67f92517, type: 3}
   m_Name: 
@@ -279,6 +261,7 @@ MonoBehaviour:
   target: {fileID: 1642546480933184916, guid: e9d6e7c0a5144234e930c2a6c12dab4d, type: 3}
   damage: 10
   attackRate: 1
+  attackRange: 0.5
 --- !u!135 &7442965807726126025
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -359,31 +342,27 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 8464511146838728654}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!65 &7345274620427805758
-BoxCollider:
+--- !u!114 &8464511146838728654
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4829085611075302500}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5450105553846197281
 GameObject:
   m_ObjectHideFlags: 0

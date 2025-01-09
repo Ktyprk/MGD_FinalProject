@@ -20,7 +20,6 @@ public class UIManager : MonoBehaviour
 
         if (_player != null)
         {
-            Debug.Log("Player is not null");
             healthSlider.value = _player.Health;
         }
 
