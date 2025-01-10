@@ -22,6 +22,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     private bool isReady = false;
     
     public TMP_InputField NicknameInputField;
+    public TMP_Text Nickname;
     public GameObject NicknameSetButton;
 
     void Awake()
@@ -193,6 +194,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void SetNickname()
     {
         string nickname = NicknameInputField.text;
+        Nickname.text = nickname;
 
         if (!string.IsNullOrEmpty(nickname))
         {

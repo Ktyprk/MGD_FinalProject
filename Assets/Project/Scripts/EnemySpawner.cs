@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
     {
         while (shouldSpawn)
         {
-            float spawnDelay = Random.Range(2f, 5f); 
+            float spawnDelay = Random.Range(15f, 20f); 
             yield return new WaitForSeconds(spawnDelay);
 
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -36,7 +36,6 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
 
             if (enemyType == 0)
             {
-                //PhotonNetwork.Instantiate(enemy1Prefab.name, spawnPoint.position, spawnPoint.rotation);
                 PhotonNetwork.Instantiate(
                     Path.Combine("PhotonPrefabs", "BatEnemy"),
                     spawnPoint.position, spawnPoint.rotation
@@ -45,7 +44,7 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
             else
             {
                 PhotonNetwork.Instantiate(
-                    Path.Combine("PhotonPrefabs", "BatEnemy"),
+                    Path.Combine("PhotonPrefabs", "GhostEnemy"),
                     spawnPoint.position, spawnPoint.rotation
                 );
             }

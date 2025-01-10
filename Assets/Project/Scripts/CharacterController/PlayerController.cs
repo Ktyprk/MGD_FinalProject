@@ -4,13 +4,15 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.IO;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
         [SerializeField] private CharacterController characterController;
     
-         public int Health = 10;
+         public int enemydamage = 5;
          public bool alive = true;
     
         public PhotonView photonView;
@@ -43,6 +45,10 @@ public class PlayerController : MonoBehaviour
 
 
         public Camera cam;
+        
+        public int MaxHealth = 100;
+        public int Health;
+        public Image HealthBar; 
     
         public void SetCamera(Camera assignedCam)
         {
@@ -155,12 +161,6 @@ public class PlayerController : MonoBehaviour
                     spawnTimer = 0f;
                 }
             }
-
-            if (Health <= 0)
-            {
-                PhotonNetwork.Destroy(gameObject);
-            }
-            
             
         }
         
@@ -212,9 +212,23 @@ public class PlayerController : MonoBehaviour
             if(Health <= 0)
             {
                 Health = 0;
-                alive = false;
+                photonView.RPC("RPC_DestroyBullet", RpcTarget.All);
             }
             Debug.Log("Taken " + damage + " damage.");
+        }
+        
+        void UpdateHealthBar()
+        {
+            if (HealthBar != null)
+            {
+                HealthBar.fillAmount = (float)Health / MaxHealth;
+            }
+        }
+        
+        [PunRPC]
+        void RPC_DestroyBullet()
+        {
+            Destroy(gameObject);
         }
         
         private float VerticalForceCalculation()
@@ -234,6 +248,14 @@ public class PlayerController : MonoBehaviour
         private void InputHandler()
         {
             inputVector = ControlsManager.Instance.controls.Player.Move.ReadValue<Vector2>();
-        } 
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                TakeDamage(enemydamage, photonView.Owner);
+            }
+        }
 }
 

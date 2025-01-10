@@ -57,22 +57,29 @@ public class RoomViewManager : MonoBehaviourPunCallbacks
     {
         if (playerIndex >= 0 && playerIndex < readyTexts.Length)
         {
-            readyTexts[playerIndex].text = isReady ? "Hazır" : "Hazır Değil";
+            if (playerIndex == 0)
+            {
+                readyTexts[playerIndex].gameObject.SetActive(false);
+            }
+            else
+            {
+                readyTexts[playerIndex].gameObject.SetActive(true);
+                readyTexts[playerIndex].text = isReady ? "Hazır" : "Hazır Değil";
+            }
         }
     }
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         int playerIndex = targetPlayer.ActorNumber - 1;
-
-        // Oyuncunun adı güncellendi mi?
+        
         if (changedProps.ContainsKey("NickName"))
         {
             string updatedNickname = (string)targetPlayer.CustomProperties["NickName"];
             UpdatePlayerName(playerIndex, updatedNickname);
         }
-
-        // Hazır durumu güncellendi mi?
+        
         if (changedProps.ContainsKey("IsReady"))
         {
             bool isReady = (bool)changedProps["IsReady"];
