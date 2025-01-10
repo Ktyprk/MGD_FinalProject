@@ -115,7 +115,7 @@ Transform:
   m_GameObject: {fileID: 1027156523915971300}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50000083, y: 0.4999993, z: 0.49999952, w: 0.50000036}
-  m_LocalPosition: {x: -0.044821717, y: 0.18691993, z: -0.0089045875}
+  m_LocalPosition: {x: -0.04482172, y: 0.18691993, z: -0.008904587}
   m_LocalScale: {x: 74.41343, y: 74.41343, z: 74.41343}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -185,7 +185,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1806181880937163940}
-  - component: {fileID: 3634047535911425183}
   - component: {fileID: 3197633741188794400}
   - component: {fileID: 3904458325833122070}
   - component: {fileID: 7442965807726126025}
@@ -193,6 +192,8 @@ GameObject:
   - component: {fileID: -518133770621393782}
   - component: {fileID: 8711899501337291347}
   - component: {fileID: 8464511146838728654}
+  - component: {fileID: 2477598500295534086}
+  - component: {fileID: 4876782305387031952}
   m_Layer: 0
   m_Name: BatEnemy
   m_TagString: Bat
@@ -217,20 +218,6 @@ Transform:
   - {fileID: 7215978322786744525}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &3634047535911425183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4829085611075302500}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5ad555471c09e44ebaba73e67f92517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spinningObject: {fileID: 5450105553846197281}
-  spinSpeed: 300
 --- !u!114 &3197633741188794400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,10 +245,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  target: {fileID: 1642546480933184916, guid: e9d6e7c0a5144234e930c2a6c12dab4d, type: 3}
-  damage: 10
-  attackRate: 1
+  target: {fileID: 0}
+  damage: 1
+  attackRate: 10
+  idleRate: 2
   attackRange: 0.5
+  animator: {fileID: 2477598500295534086}
 --- !u!135 &7442965807726126025
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -344,6 +333,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8464511146838728654}
+  - {fileID: 4876782305387031952}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -363,6 +353,49 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!95 &2477598500295534086
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4829085611075302500}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a0b9ca734c6bc0c40bde3018794a42c4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4876782305387031952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4829085611075302500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: isAttacking
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &5450105553846197281
 GameObject:
   m_ObjectHideFlags: 0

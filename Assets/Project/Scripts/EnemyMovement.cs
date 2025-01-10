@@ -8,9 +8,11 @@ public class EnemyMovement : MonoBehaviour
     public GameObject target;
     public int damage = 10;
     public float attackRate = 1f;
+    public float idleRate = 1f;
     private bool isAttacking = false;
     
     [SerializeField] private float attackRange = 2f;  
+    [SerializeField] private Animator animator;
 
     void Start()
     {
@@ -59,9 +61,11 @@ public class EnemyMovement : MonoBehaviour
     {
         while (isAttacking)
         {
-            target.GetComponent<TargetHealthController>().TakeDamage(damage);
+            animator.SetBool("isAttacking", true);
+            target.GetComponent<TargetHealthController>()?.TakeDamage(damage);
             yield return new WaitForSeconds(attackRate);
-            
+            animator.SetBool("isAttacking", false);
+            yield return new WaitForSeconds(idleRate);
         }
     }
 }

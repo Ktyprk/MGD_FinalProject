@@ -3240,7 +3240,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Haz\u0131r"
+  m_text: isNotReady
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5295,11 +5295,12 @@ MonoBehaviour:
   playerPrefabs:
   - {fileID: 2081627943}
   - {fileID: 712586743}
-  playerNameListUI: {fileID: 0}
-  playerNameTextPrefab: {fileID: 0}
   playerNamesTexts:
   - {fileID: 1873110242}
   - {fileID: 50833609}
+  readyTexts:
+  - {fileID: 1548945966}
+  - {fileID: 664602409}
 --- !u!114 &1168763546
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,11 +10,8 @@ public class RoomViewManager : MonoBehaviourPunCallbacks
     public GameObject[] playerPrefabs;
 
     [Header("UI Settings")]
-    public GameObject playerNameListUI; 
-    public TMPro.TextMeshProUGUI playerNameTextPrefab; 
     public TMP_Text[] playerNamesTexts;
-
-    private List<string> playerNames = new List<string>(); 
+    public TMP_Text[] readyTexts;
 
     private void Start()
     {
@@ -29,6 +26,8 @@ public class RoomViewManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             int spawnIndex = player.ActorNumber - 1;
+
+            // Oyuncu prefab'ını aktif etme
             if (spawnIndex >= 0 && spawnIndex < playerPrefabs.Length)
             {
                 if (!playerPrefabs[spawnIndex].activeSelf)
@@ -36,79 +35,70 @@ public class RoomViewManager : MonoBehaviourPunCallbacks
                     playerPrefabs[spawnIndex].SetActive(true);
                 }
             }
+
+            // Oyuncu ismini ve hazır durumunu güncelle
             string nickname = (string)player.CustomProperties["NickName"];
-            int playerIndex = player.ActorNumber - 1;
-            AddPlayerName(playerIndex, nickname);
+            bool isReady = player.CustomProperties.ContainsKey("IsReady") ? (bool)player.CustomProperties["IsReady"] : false;
+
+            UpdatePlayerName(spawnIndex, nickname);
+            UpdateReadyStatus(spawnIndex, isReady);
         }
     }
 
-    private void AddPlayerName(int spawnIndex, string nickname)
+    private void UpdatePlayerName(int playerIndex, string nickname)
     {
-        if (spawnIndex < playerNamesTexts.Length)
+        if (playerIndex >= 0 && playerIndex < playerNamesTexts.Length)
         {
-            playerNamesTexts[spawnIndex].text = nickname; 
+            playerNamesTexts[playerIndex].text = nickname;
         }
-        
-        if (!playerNames.Contains(nickname))
-        {
-            playerNames.Add(nickname);
-        }
+    }
 
-        UpdatePlayerNameUI();
+    private void UpdateReadyStatus(int playerIndex, bool isReady)
+    {
+        if (playerIndex >= 0 && playerIndex < readyTexts.Length)
+        {
+            readyTexts[playerIndex].text = isReady ? "Hazır" : "Hazır Değil";
+        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+        int playerIndex = targetPlayer.ActorNumber - 1;
+
+        // Oyuncunun adı güncellendi mi?
         if (changedProps.ContainsKey("NickName"))
         {
-            string updatedNickname = (string)changedProps["NickName"];
-            int playerIndex = targetPlayer.ActorNumber - 1; 
-            AddPlayerName(playerIndex, updatedNickname); 
+            string updatedNickname = (string)targetPlayer.CustomProperties["NickName"];
+            UpdatePlayerName(playerIndex, updatedNickname);
+        }
+
+        // Hazır durumu güncellendi mi?
+        if (changedProps.ContainsKey("IsReady"))
+        {
+            bool isReady = (bool)changedProps["IsReady"];
+            UpdateReadyStatus(playerIndex, isReady);
         }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log($"{newPlayer.NickName} odaya katıldı.");
-        
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            int spawnIndex = player.ActorNumber - 1;
-            if (spawnIndex >= 0 && spawnIndex < playerPrefabs.Length)
-            {
-                if (!playerPrefabs[spawnIndex].activeSelf)
-                {
-                    playerPrefabs[spawnIndex].SetActive(true);
-                }
-            }
-
-            string nickname = (string)player.CustomProperties["NickName"];
-            int playerIndex = player.ActorNumber - 1;
-            AddPlayerName(playerIndex, nickname);
-        }
+        SpawnPlayer();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log($"{otherPlayer.NickName} odadan ayrıldı.");
-        playerNames.Remove(otherPlayer.NickName);
-        UpdatePlayerNameUI();
-    }
+        int playerIndex = otherPlayer.ActorNumber - 1;
 
-    private void UpdatePlayerNameUI()
-    {
-        if (playerNameListUI != null)
+        // Oyuncu odadan ayrıldığında UI'ı temizle
+        if (playerIndex >= 0 && playerIndex < playerNamesTexts.Length)
         {
-            foreach (Transform child in playerNameListUI.transform)
-            {
-                Destroy(child.gameObject);
-            }
-            
-            foreach (string name in playerNames)
-            {
-                TMPro.TextMeshProUGUI newText = Instantiate(playerNameTextPrefab, playerNameListUI.transform);
-                newText.text = name;
-            }
+            playerNamesTexts[playerIndex].text = "";
+        }
+        if (playerIndex >= 0 && playerIndex < readyTexts.Length)
+        {
+            readyTexts[playerIndex].text = "";
         }
     }
 }
