@@ -110,10 +110,10 @@ public class PlayerController : MonoBehaviour
             OnStateChange?.Invoke(currentState);
         }
         
-        public float spawnInterval = 0.5f; // Mermi spawn aralığı (saniye)
-        public float bulletForce = 20f;   // Mermiye uygulanacak ileri yönlü kuvvet
+        public float spawnInterval = 0.5f; 
+        public float bulletForce = 20f;   
 
-        private bool isShooting = false;  // Mouse sol tuşu basılı mı?
+        private bool isShooting = false;  
         private float spawnTimer = 0f; 
 
         private void Update()
@@ -188,15 +188,12 @@ public class PlayerController : MonoBehaviour
 
         public void HandleRotation()
         {
-            // Fare pozisyonunu ekrandan dünya koordinatlarına çevir
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
             {
-                // Fare pozisyonunu dünya koordinatlarında al
                 Vector3 targetPosition = hit.point;
-                targetPosition.y = transform.position.y; // Yükseklik sabit kalsın
-        
-                // Karakterin rotasyonunu hedef pozisyona ayarla
+                targetPosition.y = transform.position.y; 
+                
                 Vector3 direction = (targetPosition - transform.position).normalized;
                 if (direction != Vector3.zero)
                 {
@@ -207,22 +204,23 @@ public class PlayerController : MonoBehaviour
         }
 
     
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, Player player)
         {
-            photonView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, damage);
+            photonView.RPC("RPC_TakeDamage", player, damage);
         }
 
         [PunRPC]
         void RPC_TakeDamage(int damage)
         {
             Health -= damage;
+            UpdateHealthBar();
             if(Health <= 0)
             {
                 Health = 0;
                 photonView.RPC("RPC_DestroyBullet", RpcTarget.All);
             }
             Debug.Log("Taken " + damage + " damage.");
-            UpdateHealthBar();
+            
         }
         
         void UpdateHealthBar()
@@ -230,6 +228,14 @@ public class PlayerController : MonoBehaviour
             if (HealthBar != null)
             {
                 HealthBar.fillAmount = (float)Health / MaxHealth;
+            }
+        }
+        
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                TakeDamage(enemydamage, photonView.Owner);
             }
         }
         
@@ -258,12 +264,6 @@ public class PlayerController : MonoBehaviour
             inputVector = ControlsManager.Instance.controls.Player.Move.ReadValue<Vector2>();
         }
 
-        public void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                TakeDamage(enemydamage);
-            }
-        }
+        
 }
 
