@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviourPunCallbacks
     {
         while (shouldSpawn)
         {
-            float spawnDelay = Random.Range(5f, 10f); 
+            float spawnDelay = Random.Range(3f, 8f); 
             yield return new WaitForSeconds(spawnDelay);
 
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
