@@ -188,18 +188,28 @@ public class PlayerController : MonoBehaviour
 
         public void HandleRotation()
         {
-            if (inputVector.magnitude > 0.1f)
+            // Fare pozisyonunu ekrandan dünya koordinatlarına çevir
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
             {
-                Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y).normalized;
-                
-                Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                // Fare pozisyonunu dünya koordinatlarında al
+                Vector3 targetPosition = hit.point;
+                targetPosition.y = transform.position.y; // Yükseklik sabit kalsın
+        
+                // Karakterin rotasyonunu hedef pozisyona ayarla
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                }
             }
         }
+
     
-        public void TakeDamage(int damage, Player _player)
+        public void TakeDamage(int damage)
         {
-            photonView.RPC("RPC_TakeDamage", _player, damage);
+            photonView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, damage);
         }
 
         [PunRPC]
@@ -252,7 +262,7 @@ public class PlayerController : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
-                TakeDamage(enemydamage, photonView.Owner);
+                TakeDamage(enemydamage);
             }
         }
 }

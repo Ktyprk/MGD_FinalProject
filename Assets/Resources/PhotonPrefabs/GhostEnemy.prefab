@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   target: {fileID: 0}
-  damage: 5
+  damage: 7
   attackRate: 10
   idleRate: 2
   attackRange: 0.5
