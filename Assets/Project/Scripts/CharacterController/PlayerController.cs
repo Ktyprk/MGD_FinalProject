@@ -143,15 +143,13 @@ public class PlayerController : MonoBehaviour
             {
                 isShooting = true;
             }
-
-            // Mouse sol tuşu bırakıldığında atış durur
+            
             if (Input.GetMouseButtonUp(0))
             {
                 isShooting = false;
-                spawnTimer = 0f; // Zamanlayıcıyı sıfırla
+                spawnTimer = 0f; 
             }
-
-            // Eğer atış yapılıyorsa ve zamanlama uygunsa mermi spawn et
+            
             if (isShooting)
             {
                 spawnTimer += Time.deltaTime;
@@ -171,8 +169,7 @@ public class PlayerController : MonoBehaviour
                 transform.position + transform.forward * 2f, 
                 Quaternion.identity
             );
-
-            // Mermiye ileri yönlü kuvvet uygula
+            
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             if (bulletRb != null)
             {
@@ -215,6 +212,7 @@ public class PlayerController : MonoBehaviour
                 photonView.RPC("RPC_DestroyBullet", RpcTarget.All);
             }
             Debug.Log("Taken " + damage + " damage.");
+            UpdateHealthBar();
         }
         
         void UpdateHealthBar()
